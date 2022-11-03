@@ -3,12 +3,16 @@ package com.buddy.study.account.controller;
 
 import com.buddy.study.account.dto.JoinRequest;
 import com.buddy.study.account.dto.LoginRequest;
+import com.buddy.study.account.dto.LoginResponse;
 import com.buddy.study.account.service.AccountService;
-import com.buddy.study.common.dto.CommonResponse;
+import com.buddy.study.common.dto.FailResponse;
+import com.buddy.study.common.dto.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,22 +20,22 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     final private AccountService accountService;
     @PostMapping("")
-    public ResponseEntity<CommonResponse> joinUser(@RequestBody JoinRequest joinRequest){
+    public ResponseEntity<MessageResponse> joinUser(@RequestBody JoinRequest joinRequest){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(accountService.saveUser(joinRequest));
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity outUser(@PathVariable(name="id") Long id){
+    @DeleteMapping("")
+    public ResponseEntity<MessageResponse> outUser(@RequestHeader("Authorization") UUID uuid){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(accountService.outUser(id));
+                .body(accountService.outUser(uuid));
     }
     @GetMapping("/duplication")
-    public ResponseEntity<CommonResponse> dupUser(@RequestParam("email") String email){
+    public ResponseEntity<MessageResponse> dupUser(@RequestParam("email") String email){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(accountService.checkUser(email));
     }
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse> joinUser(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<LoginResponse> joinUser(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(accountService.loginUser(loginRequest));
     }
