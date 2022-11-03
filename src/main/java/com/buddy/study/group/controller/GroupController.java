@@ -1,7 +1,6 @@
 package com.buddy.study.group.controller;
 
 import com.buddy.study.account.dto.JoinRequest;
-import com.buddy.study.common.dto.CommonResponse;
 import com.buddy.study.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +18,6 @@ public class GroupController {
     @PostMapping("")
     public ResponseEntity createGroup(@RequestBody JoinRequest joinRequest){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(groupService.createRoom());
+                .build();
     }
 }
