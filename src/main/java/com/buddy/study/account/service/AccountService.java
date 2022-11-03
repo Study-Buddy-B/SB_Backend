@@ -5,39 +5,55 @@ import com.buddy.study.account.dto.JoinRequest;
 import com.buddy.study.account.dto.LoginRequest;
 import com.buddy.study.account.dto.LoginResponse;
 import com.buddy.study.account.repository.AccountRepository;
-import com.buddy.study.common.dto.CommonResponse;
+import com.buddy.study.common.dto.FailResponse;
 import com.buddy.study.common.dto.ErrorCode;
+import com.buddy.study.common.dto.MessageResponse;
 import com.buddy.study.common.exception.ConflictException;
 import com.buddy.study.common.exception.UnauthorizedException;
+import com.buddy.study.common.service.CommonService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
     final private AccountRepository accountRepository;
-    private CommonResponse commonResponse=new CommonResponse();
-    public CommonResponse saveUser(JoinRequest joinRequest){
+    final private CommonService commonService;
+    private MessageResponse messageResponse=new MessageResponse();
+    public MessageResponse checkUser(String email){
+        if(accountRepository.findByEmail(email)!=null){
+            throw new ConflictException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        messageResponse.setMessage("사용가능한 이메일입니다.");
+        return messageResponse;
+    }
+    public MessageResponse saveUser(JoinRequest joinRequest){
+        checkUser(joinRequest.getEmail());
+        commonService.checkUser(joinRequest.getName());
+
         Account account= new Account();
         account.setEmail(joinRequest.getEmail());
         account.setName(joinRequest.getName());
         account.setPassword(joinRequest.getPassword());
         accountRepository.save(account);
-        return commonResponse.success("회원가입에 성공했습니다", null);
+        messageResponse.setMessage("회원가입에 성공했습니다.");
+        return messageResponse;
     }
-    public CommonResponse outUser(Long id){
-        Account account= accountRepository.findById(id).orElse(null);
-        account.setIsDelete(true);
-        accountRepository.save(account);
-        return commonResponse.success("성공적으로 회원 탈퇴되었습니다.", null);
-    }
-    public CommonResponse checkUser(String email){
-        if(accountRepository.findByEmail(email)!=null){
-            throw new ConflictException(ErrorCode.DUPLICATE_EMAIL);
+    public MessageResponse outUser(UUID uuid){
+        Account account= accountRepository.findById(uuid).orElse(null);
+        if(account==null){
+            throw new UnauthorizedException(ErrorCode.INVALID_EMAIL);
         }
-        return commonResponse.success("사용가능한 이메일입니다.", null);
+        account.setIsDelete(true);
+        System.out.println(account.getEmail());
+        accountRepository.save(account);
+        messageResponse.setMessage("회원탈퇴에 성공했습니다.");
+        return messageResponse;
     }
-    public CommonResponse loginUser(LoginRequest loginRequest){
+    public LoginResponse loginUser(LoginRequest loginRequest){
         Account account=accountRepository.findByEmail(loginRequest.getEmail());
         if(account==null){
             throw new UnauthorizedException(ErrorCode.INVALID_EMAIL);
@@ -48,8 +64,7 @@ public class AccountService {
         if(account.getIsDelete()){
             throw new UnauthorizedException(ErrorCode.WITHDRAW_EMAIL);
         }
-        LoginResponse loginResponse=new LoginResponse();
-        loginResponse.setUid(account.getId());
-        return commonResponse.success("로그인에 성공했습니다.", loginResponse);
+        LoginResponse loginResponse=new LoginResponse(account.getId());
+        return loginResponse;
     }
 }

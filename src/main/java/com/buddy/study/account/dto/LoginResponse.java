@@ -1,9 +1,11 @@
 package com.buddy.study.account.dto;
 
-import lombok.Data;
 import lombok.Getter;
 
-@Data
+import java.util.UUID;
+
+@Getter
 public class LoginResponse {
-    private Long uid;
+    private UUID uuid;
+    public LoginResponse(UUID uuid){this.uuid=uuid;}
 }
