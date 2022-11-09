@@ -23,6 +23,9 @@ public class AccountService {
     final private AccountRepository accountRepository;
     final private CommonService commonService;
     private MessageResponse messageResponse=new MessageResponse();
+    public Account findUser(UUID uid){
+        return accountRepository.findById(uid).orElse(null);
+    }
     public MessageResponse checkUser(String email){
         if(accountRepository.findByEmail(email)!=null){
             throw new ConflictException(ErrorCode.DUPLICATE_EMAIL);
