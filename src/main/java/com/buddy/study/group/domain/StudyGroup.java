@@ -1,12 +1,10 @@
 package com.buddy.study.group.domain;
 
+import com.buddy.study.group.dto.GroupType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Setter
@@ -18,6 +16,9 @@ public class StudyGroup {
     private Long id;
     private String name;
     private Integer time;
+    @Enumerated(value=EnumType.STRING)
+    private GroupType groupType;
     private Integer maxPerson;
+    private Integer curPerson=0;
     private Boolean isDelete=false;
 }
