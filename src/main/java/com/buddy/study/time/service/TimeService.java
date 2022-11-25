@@ -41,7 +41,7 @@ public class TimeService {
     }
     public TimeResponse createTime(UUID userId, CreateRequest request) {
         Account account = accountService.findUser(userId);
-        String today = "2022-10-19";
+        String today = LocalDate.now().toString();
 
         Optional<Time> exist = timeRepository.findOneByDateAndAccount(today, account);
         Time time = exist.orElseGet(() -> Time.builder()
