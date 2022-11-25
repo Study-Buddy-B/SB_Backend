@@ -1,5 +1,10 @@
 package com.buddy.study.time.dto;
 
-public class CreateRequest {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+public class CreateRequest {
+    private Float time;
 }
