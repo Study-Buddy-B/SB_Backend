@@ -1,4 +1,4 @@
-package com.buddy.study.notice.domain;
+package com.buddy.study.temperature.domain;
 
 import com.buddy.study.account.domain.Account;
 import javax.persistence.Column;
@@ -13,22 +13,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Notice {
+public class Temperature {
     @Id
     @GeneratedValue
     @Column(name="noticeId")
     private Long id;
 
     @Column
-    private String content;
+    private Float current;
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    @Column
     private Account account;
 
-    public Notice(String content, Account account) {
-        this.content = content;
+    public Temperature(Float current, Account account) {
+        this.current = current;
         this.account = account;
     }
 }

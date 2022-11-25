@@ -1,4 +1,4 @@
-package com.buddy.study.notice.dto;
+package com.buddy.study.temperature.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CreateRequest {
-    private Integer type;
     private Float current;
-    private Float required;
 }
