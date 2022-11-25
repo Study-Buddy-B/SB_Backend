@@ -10,9 +10,11 @@ import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Time {
     @Id
@@ -28,7 +30,6 @@ public class Time {
 
     @ManyToOne
     @JoinColumn(name="userId")
-    @Column
     private Account account;
 
     @Builder

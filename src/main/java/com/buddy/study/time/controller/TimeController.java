@@ -1,6 +1,5 @@
 package com.buddy.study.time.controller;
 
-import com.buddy.study.time.domain.Time;
 import com.buddy.study.time.dto.CreateRequest;
 import com.buddy.study.time.dto.TimeReportResponse;
 import com.buddy.study.time.dto.TimeResponse;
@@ -30,12 +29,21 @@ public class TimeController {
 
     @GetMapping("/month/{month}")
     public ResponseEntity<List<TimeResponse>> getTimesByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
-        return ResponseEntity.ok(timeService.getTimesByMonth(userId, month));
+        String formattedMonth =  timeService.validateDate(month);
+        System.out.println(formattedMonth);
+        return ResponseEntity.ok(timeService.getTimesByMonth(userId, formattedMonth));
     }
 
     @GetMapping("/month/{month}/report")
     public ResponseEntity<TimeReportResponse> getReportByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
-        return ResponseEntity.ok(timeService.getTimeReportByMonth(userId, month));
+        String formattedMonth =  timeService.validateDate(month);
+        System.out.println(formattedMonth);
+        return ResponseEntity.ok(timeService.getTimeReportByMonth(userId, formattedMonth));
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<TimeResponse> getTodayTime(@RequestHeader("Authorization") UUID userId) {
+        return ResponseEntity.ok(timeService.getTodayTime(userId));
     }
 
 }
