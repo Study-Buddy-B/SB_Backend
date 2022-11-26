@@ -24,5 +24,6 @@ public class Account {
     @Column(unique = true)
     private String email;
     private String password;
+    private Integer hours=24;
     private Boolean isDelete=false;
 }
