@@ -10,6 +10,7 @@ public enum ErrorCode {
     MAXIMUM_GROUP("C002","현재 최대인원으로 가입할 수 없습니다."),
     DUPLICATE_GROUP("C003", "이미 가입한 그룹입니다."),
     INVALIDATE_DATE("C004", "날짜 형식이 요구되는 형식과 맞지 않습니다."),
+    INVALIDATE_TIME("C005", "목표시간 범위는 1 이상 24 이하 입니다."),
 
     //Unauthorized : 401
     INVALID_EMAIL("U000","가입되지 않은 이메일입니다."),

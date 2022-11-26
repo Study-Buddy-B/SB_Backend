@@ -1,7 +1,6 @@
 package com.buddy.study.group.domain;
 
 import com.buddy.study.account.domain.Account;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +19,6 @@ public class Mapping {
     private Account account;
     @ManyToOne
     @JoinColumn(name = "groupId")
-    private StudyGroup group;
+    private Group group;
 }
 
