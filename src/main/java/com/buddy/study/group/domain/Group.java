@@ -6,10 +6,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "study_group")
 @Setter
 @Getter
-public class StudyGroup {
+public class Group {
     @Id
     @GeneratedValue
     @Column(name="groupId")
