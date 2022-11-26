@@ -4,6 +4,7 @@ import com.buddy.study.time.dto.CreateRequest;
 import com.buddy.study.time.dto.TimeReportResponse;
 import com.buddy.study.time.dto.TimeResponse;
 import com.buddy.study.time.service.TimeService;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +22,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/time")
 public class TimeController {
     private final TimeService timeService;
-
+    @Operation(summary = "시간 업데이트")
     @PostMapping("")
     public ResponseEntity<TimeResponse> createTime(@RequestHeader("Authorization") UUID userId, @RequestBody CreateRequest request) {
         return ResponseEntity.ok(timeService.createTime(userId, request));
     }
-
+    @Operation(summary = "월 공부 시간 출력")
     @GetMapping("/month/{month}")
     public ResponseEntity<List<TimeResponse>> getTimesByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
         String formattedMonth =  timeService.validateDate(month);
         System.out.println(formattedMonth);
         return ResponseEntity.ok(timeService.getTimesByMonth(userId, formattedMonth));
     }
-
+    @Operation(summary = "월 시간 통계(평균,최소,최대)")
     @GetMapping("/month/{month}/report")
     public ResponseEntity<TimeReportResponse> getReportByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
         String formattedMonth =  timeService.validateDate(month);
         System.out.println(formattedMonth);
         return ResponseEntity.ok(timeService.getTimeReportByMonth(userId, formattedMonth));
     }
-
+    @Operation(summary = "하루 공부 시간 출력")
     @GetMapping("/today")
     public ResponseEntity<TimeResponse> getTodayTime(@RequestHeader("Authorization") UUID userId) {
         return ResponseEntity.ok(timeService.getTodayTime(userId));
