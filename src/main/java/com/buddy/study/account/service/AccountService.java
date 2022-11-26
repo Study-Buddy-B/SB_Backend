@@ -5,14 +5,18 @@ import com.buddy.study.account.dto.JoinRequest;
 import com.buddy.study.account.dto.LoginRequest;
 import com.buddy.study.account.dto.LoginResponse;
 import com.buddy.study.account.repository.AccountRepository;
-import com.buddy.study.common.dto.FailResponse;
 import com.buddy.study.common.dto.ErrorCode;
 import com.buddy.study.common.dto.MessageResponse;
 import com.buddy.study.common.exception.ConflictException;
 import com.buddy.study.common.exception.UnauthorizedException;
-import com.buddy.study.common.service.CommonService;
+import com.buddy.study.temperature.domain.Temperature;
+import com.buddy.study.temperature.repository.TemperatureRepository;
+import com.buddy.study.time.domain.Time;
+import com.buddy.study.time.repository.TimeRepository;
+import com.buddy.study.user.dto.TimeRequest;
+import com.buddy.study.user.service.UserService;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,27 +25,41 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountService {
     final private AccountRepository accountRepository;
-    final private CommonService commonService;
+    final private TemperatureRepository temperatureRepository;
+    final private TimeRepository timeRepository;
     private MessageResponse messageResponse=new MessageResponse();
     public Account findUser(UUID uid){
         return accountRepository.findById(uid).orElse(null);
     }
-    public MessageResponse checkUser(String email){
+    public void checkName(String name){
+        if(accountRepository.findByName(name)!=null){
+            throw new ConflictException(ErrorCode.DUPLICATE_NAME);
+        }
+    }
+    public void checkUser(String email){
         if(accountRepository.findByEmail(email)!=null){
             throw new ConflictException(ErrorCode.DUPLICATE_EMAIL);
         }
-        messageResponse.setMessage("사용가능한 이메일입니다.");
-        return messageResponse;
     }
     public MessageResponse saveUser(JoinRequest joinRequest){
         checkUser(joinRequest.getEmail());
-        commonService.checkUser(joinRequest.getName());
+        checkName(joinRequest.getName());
 
         Account account= new Account();
         account.setEmail(joinRequest.getEmail());
         account.setName(joinRequest.getName());
         account.setPassword(joinRequest.getPassword());
         accountRepository.save(account);
+
+        Time time=new Time();
+        time.setAccount(account);
+        time.setDate(LocalDate.now().toString());
+        time.setTime(0f);
+        timeRepository.save(time);
+
+        Temperature temperature=new Temperature(20.5f,account);
+        temperatureRepository.save(temperature);
+
         messageResponse.setMessage("회원가입에 성공했습니다.");
         return messageResponse;
     }

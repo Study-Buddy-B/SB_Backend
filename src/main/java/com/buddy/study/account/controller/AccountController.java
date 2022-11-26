@@ -29,11 +29,6 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(accountService.outUser(uuid));
     }
-    @GetMapping("/duplication")
-    public ResponseEntity<MessageResponse> dupUser(@RequestParam("email") String email){
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(accountService.checkUser(email));
-    }
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> joinUser(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.status(HttpStatus.OK)
