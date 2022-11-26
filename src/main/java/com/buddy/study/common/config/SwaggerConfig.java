@@ -12,7 +12,7 @@ public class SwaggerConfig {
   public GroupedOpenApi accountApi() {
     return GroupedOpenApi.builder()
         .group("계정 관련 API")
-        .pathsToMatch("/api/v1/accounts/**")
+        .pathsToMatch("/api/v1/account/**")
         .build();
   }
   @Bean
