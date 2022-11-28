@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/posture")
 public class PostureController {
     private final PostureService postureService;
-    @Operation(summary = "온도 업데이트")
+    @Operation(summary = "자세 업데이트")
     @PostMapping
     public ResponseEntity<PostureResponse> createTemperature(@RequestHeader("Authorization") UUID userId, @RequestBody CreateRequest request) {
         return ResponseEntity.ok(postureService.createPosture(userId, request));
     }
-    @Operation(summary = "온도 조회")
+    @Operation(summary = "자세 조회")
     @GetMapping
     public ResponseEntity<PostureResponse> getTemperature(@RequestHeader("Authorization") UUID userId) {
         return ResponseEntity.ok(postureService.getPosture(userId));
