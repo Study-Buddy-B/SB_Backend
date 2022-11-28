@@ -28,7 +28,7 @@ public class PostureService {
         Account account = accountService.findUser(userId);
 
         Posture posture = postureRepository.findTopByAccountOrderByIdDesc(account)
-            .orElse(postureRepository.save(new Posture(true, account)));
+            .orElseGet(()-> postureRepository.save(new Posture(true, account)));
         return new PostureResponse(posture);
     }
 }
