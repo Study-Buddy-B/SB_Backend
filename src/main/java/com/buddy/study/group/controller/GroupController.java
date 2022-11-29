@@ -30,7 +30,7 @@ public class GroupController {
                 .body(groupService.createGroup(uid,groupRequest));
     }
     @Operation(summary = "그룹 가입")
-    @GetMapping("join")
+    @GetMapping("/join")
     public ResponseEntity<MessageResponse> joinGroup(@RequestHeader("Authorization") UUID uid,
                                                      @RequestParam("groupId")Long gid){
         return ResponseEntity.status(HttpStatus.OK)
@@ -40,12 +40,18 @@ public class GroupController {
     @GetMapping("")
     public ResponseEntity<List<GroupResponse>> loadAllGroup(){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(groupService.loadGroup());
+                .body(groupService.loadGroup(null));
     }
     @Operation(summary = "그룹 상세 보기")
     @GetMapping("/{gid}")
     public ResponseEntity<DetailsResponse> loadGroup(@PathVariable Long gid){
         return ResponseEntity.status(HttpStatus.OK)
             .body(groupService.detailGroup(gid));
+    }
+    @Operation(summary = "속한 그룹 조회")
+    @GetMapping("/belong")
+    public ResponseEntity<List<GroupResponse>> loadMyGroup(@RequestHeader("Authorization") UUID uid){
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(groupService.loadGroup(uid));
     }
 }
