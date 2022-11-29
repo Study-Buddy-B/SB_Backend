@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GroupResponse {
+    private Long gid;
     private String name;
     private String type;
     private Integer curPerson;
