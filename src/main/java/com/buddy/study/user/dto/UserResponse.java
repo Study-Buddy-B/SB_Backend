@@ -11,4 +11,5 @@ public class UserResponse {
   private Float curTime;
   private Integer tarTime;
   private Float temperature;
+  private Boolean isAppropriate;
 }

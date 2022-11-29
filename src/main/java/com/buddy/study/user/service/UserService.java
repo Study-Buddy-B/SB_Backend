@@ -6,6 +6,8 @@ import com.buddy.study.account.service.AccountService;
 import com.buddy.study.common.dto.ErrorCode;
 import com.buddy.study.common.dto.MessageResponse;
 import com.buddy.study.common.exception.ConflictException;
+import com.buddy.study.posture.dto.PostureResponse;
+import com.buddy.study.posture.service.PostureService;
 import com.buddy.study.temperature.dto.TemperatureResponse;
 import com.buddy.study.temperature.service.TemperatureService;
 import com.buddy.study.time.domain.Time;
@@ -20,10 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    final private AccountRepository accountRepository;
-    final private AccountService accountService;
-    final private TimeService timeService;
-    final private TemperatureService temperatureService;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final TimeService timeService;
+    private final TemperatureService temperatureService;
+    private final PostureService postureService;
     private MessageResponse messageResponse=new MessageResponse();
 
     public UserResponse loadUser(UUID uid){
@@ -36,6 +39,10 @@ public class UserService {
 
         TemperatureResponse temperature=temperatureService.getTemperature(uid);
         userResponse.setTemperature(temperature.getCurrent());
+
+        PostureResponse postureResponse=postureService.getPosture(uid);
+        userResponse.setIsAppropriate(postureResponse.getIsAppropriate());
+
         return userResponse;
     }
     public MessageResponse setTime(UUID uid, TimeRequest timeRequest){
