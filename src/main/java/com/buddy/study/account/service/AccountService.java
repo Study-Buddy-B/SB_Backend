@@ -9,12 +9,12 @@ import com.buddy.study.common.dto.ErrorCode;
 import com.buddy.study.common.dto.MessageResponse;
 import com.buddy.study.common.exception.ConflictException;
 import com.buddy.study.common.exception.UnauthorizedException;
+import com.buddy.study.posture.domain.Posture;
+import com.buddy.study.posture.repository.PostureRepository;
 import com.buddy.study.temperature.domain.Temperature;
 import com.buddy.study.temperature.repository.TemperatureRepository;
 import com.buddy.study.time.domain.Time;
 import com.buddy.study.time.repository.TimeRepository;
-import com.buddy.study.user.dto.TimeRequest;
-import com.buddy.study.user.service.UserService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AccountService {
-    final private AccountRepository accountRepository;
-    final private TemperatureRepository temperatureRepository;
-    final private TimeRepository timeRepository;
+    private final AccountRepository accountRepository;
+    private final TemperatureRepository temperatureRepository;
+    private final TimeRepository timeRepository;
+    private final PostureRepository postureRepository;
     private MessageResponse messageResponse=new MessageResponse();
     public Account findUser(UUID uid){
         return accountRepository.findById(uid).orElse(null);
@@ -59,6 +60,9 @@ public class AccountService {
 
         Temperature temperature=new Temperature(20.5f,account);
         temperatureRepository.save(temperature);
+
+        Posture posture=new Posture(true,account);
+        postureRepository.save(posture);
 
         messageResponse.setMessage("회원가입에 성공했습니다.");
         return messageResponse;

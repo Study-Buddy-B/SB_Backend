@@ -44,6 +44,13 @@ public class SwaggerConfig {
         .build();
   }
   @Bean
+  public GroupedOpenApi postureApi() {
+    return GroupedOpenApi.builder()
+        .group("자세 관련 API")
+        .pathsToMatch("/api/v1/posture/**")
+        .build();
+  }
+  @Bean
   public OpenAPI springOpenAPI(){
     return new OpenAPI()
         .info(new Info().title("스터디버디 스웨거")

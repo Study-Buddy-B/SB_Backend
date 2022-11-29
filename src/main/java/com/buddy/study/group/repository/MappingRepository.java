@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MappingRepository extends JpaRepository<Mapping,Long> {
-    @Query("select m.group from Mapping m where m.account=:account")
+    @Query("select m.group from Mapping m where m.account=:account order by m.group.id desc")
     List<Group> findAllByAccount(@Param("account") Account account);
     List<Mapping> findAllByGroup(Group group);
 }

@@ -74,11 +74,19 @@ public class GroupService {
         messageResponse.setMessage("그룹 가입에 성공했습니다.");
         return messageResponse;
     }
-    public List<GroupResponse> loadGroup(){
+    public List<GroupResponse> loadGroup(UUID uid){
         List<GroupResponse> groupsResponse=new ArrayList<>();
-        List<Group> groups=groupRepository.findAllByOrderByIdDesc();
+        List<Group> groups=new ArrayList<>();
+        if(uid==null) {
+            groups = groupRepository.findAllByOrderByIdDesc();
+        }
+        else{
+            Account account= accountService.findUser(uid);
+            groups =mappingRepository.findAllByAccount(account);
+        }
         for(Group group:groups){
             GroupResponse groupResponse=new GroupResponse();
+            groupResponse.setGid(group.getId());
             groupResponse.setCurPerson(group.getCurPerson());
             groupResponse.setMaxPerson(group.getMaxPerson());
             groupResponse.setName(group.getName());
