@@ -29,9 +29,20 @@ public class TimeService {
 
     private final AccountService accountService;
 
-    public String validateDate(String date) { // yyyy-MM 형식인지 검증
+    public String validateMonth(String date) { // yyyy-MM 형식인지 검증
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+            simpleDateFormat.setLenient(false);
+            Date result = simpleDateFormat.parse(date);
+            return simpleDateFormat.format(result);
+        } catch(ParseException e) {
+            throw new ConflictException(ErrorCode.INVALIDATE_MONTH);
+        }
+    }
+
+    public String validateDate(String date) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             simpleDateFormat.setLenient(false);
             Date result = simpleDateFormat.parse(date);
             return simpleDateFormat.format(result);
@@ -39,6 +50,7 @@ public class TimeService {
             throw new ConflictException(ErrorCode.INVALIDATE_DATE);
         }
     }
+
     public TimeResponse createTime(UUID userId, CreateRequest request) {
         Account account = accountService.findUser(userId);
         String today = LocalDate.now().toString();
@@ -53,13 +65,11 @@ public class TimeService {
         return new TimeResponse(timeRepository.save(time));
     }
 
-    public List<TimeResponse> getTimesByMonth(UUID userId, String month) {
+    public TimeResponse getTimeByDate(UUID userId, String date) {
         Account account = accountService.findUser(userId);
 
-        return timeRepository.findAllByDateAndAccount(month,account)
-            .stream()
-            .map(TimeResponse::new)
-            .collect(Collectors.toList());
+        return new TimeResponse(timeRepository.findOneByDateAndAccount(date,account)
+            .orElseThrow(()->new ConflictException(ErrorCode.NOTFOUND_DATE)));
     }
 
     public TimeReportResponse getTimeReportByMonth(UUID userId, String month) {
