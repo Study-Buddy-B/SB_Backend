@@ -27,21 +27,24 @@ public class TimeController {
     public ResponseEntity<TimeResponse> createTime(@RequestHeader("Authorization") UUID userId, @RequestBody CreateRequest request) {
         return ResponseEntity.ok(timeService.createTime(userId, request));
     }
-    @Operation(summary = "월 공부 시간 출력")
-    @GetMapping("/month/{month}")
-    public ResponseEntity<List<TimeResponse>> getTimesByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
-        String formattedMonth =  timeService.validateDate(month);
-        System.out.println(formattedMonth);
-        return ResponseEntity.ok(timeService.getTimesByMonth(userId, formattedMonth));
+
+    @Operation(summary = "일 공부 시간 출력")
+    @GetMapping("/date/{date}")
+    public ResponseEntity<TimeResponse> getTimeByDate(@RequestHeader("Authorization") UUID userId, @PathVariable String date) {
+        String formattedDate =  timeService.validateDate(date);
+        System.out.println(formattedDate);
+        return ResponseEntity.ok(timeService.getTimeByDate(userId, formattedDate));
     }
+
     @Operation(summary = "월 시간 통계(평균,최소,최대)")
     @GetMapping("/month/{month}/report")
     public ResponseEntity<TimeReportResponse> getReportByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
-        String formattedMonth =  timeService.validateDate(month);
+        String formattedMonth =  timeService.validateMonth(month);
         System.out.println(formattedMonth);
         return ResponseEntity.ok(timeService.getTimeReportByMonth(userId, formattedMonth));
     }
-    @Operation(summary = "하루 공부 시간 출력")
+
+    @Operation(summary = "오늘 공부 시간 출력")
     @GetMapping("/today")
     public ResponseEntity<TimeResponse> getTodayTime(@RequestHeader("Authorization") UUID userId) {
         return ResponseEntity.ok(timeService.getTodayTime(userId));
