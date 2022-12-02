@@ -32,7 +32,6 @@ public class TimeController {
     @GetMapping("/date/{date}")
     public ResponseEntity<TimeResponse> getTimeByDate(@RequestHeader("Authorization") UUID userId, @PathVariable String date) {
         String formattedDate =  timeService.validateDate(date);
-        System.out.println(formattedDate);
         return ResponseEntity.ok(timeService.getTimeByDate(userId, formattedDate));
     }
 
@@ -40,7 +39,6 @@ public class TimeController {
     @GetMapping("/month/{month}/report")
     public ResponseEntity<TimeReportResponse> getReportByMonth(@RequestHeader("Authorization") UUID userId, @PathVariable String month) {
         String formattedMonth =  timeService.validateMonth(month);
-        System.out.println(formattedMonth);
         return ResponseEntity.ok(timeService.getTimeReportByMonth(userId, formattedMonth));
     }
 
